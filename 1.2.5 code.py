@@ -137,7 +137,7 @@ def scores_and_crashes():
  
 #Marks the turtle as having collided with the spikes.
 def crashed():
-  global game_running, leonardo
+  global game_running, leonardo, scorewriter
   game_running = False
   scorewriter.clear()
   timewriter.clear()
@@ -178,6 +178,7 @@ def out_of_bounds_condition():
     brick.fillcolor('aquamarine')
   scorewriter.clear()
   timewriter.clear()
+  leonardo.hideturtle()
   scorewriter.write("Sorry you needed to get all of the bricks. You lost.", font=font_setup)
   wn.ontimer(ask_to_play_again, game_over_delay)
 
@@ -203,9 +204,11 @@ def time_record():
   elif fastest_time >= 60:
     scorewriter.clear()
     scorewriter.write()("I believe you can go even faster -- at least under 60 seconds.", font=font_setup)
+    print("The fastest time is "+ str(fastest_time) + " seconds.")
   else:
     scorewriter.clear()
     scorewriter.write("You're great at this, you'll break the record soon!", font=font_setup)
+    print("The fastest time is "+ str(fastest_time) + " seconds.")
   #jumps to the play again function after 5 seconds
   wn.ontimer(ask_to_play_again, game_over_delay)
 
@@ -213,13 +216,14 @@ def time_record():
 def ask_to_play_again():
   wn.onkeypress(None, 'r')
   scorewriter.clear()
+  timewriter.clear()
   scorewriter.write("Would you like to play again? (y or n)", font=font_setup)
   wn.onkeypress(reset_game, 'y')
   wn.onkeypress(end_game, 'n')
 
 
 def reset_game():
-  global score, bricks, leonardo, spikes, game_running, spike_position_list
+  global score, bricks, leonardo, spikes, game_running, spike_position_list, elapsed
   #ensures that nothing happens when a key is accidentally pressed again, and that the game isn't running
   game_running = False
   wn.onkeypress(None, 'y')
@@ -234,6 +238,7 @@ def reset_game():
     spike.hideturtle()
  
   score = 0
+  elapsed = 0
   scorewriter.clear()
   scorewriter.write(score, font=font_setup)
 
@@ -244,6 +249,8 @@ def reset_game():
   wn.tracer(True)
   game_running = True
   game_loop()
+  tick_time()
+
 
 
 def tick_time():
@@ -289,3 +296,4 @@ game_loop() #starts the game loop for the 1st time
 
 # Starts the turtle graphics event loop
 wn.mainloop()
+
